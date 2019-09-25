@@ -15,6 +15,11 @@
                     @endif
 
                     You are logged in!
+                    <ul>
+                    @foreach ($listings as $item)
+                        <li>{{{ $item->name }}}</li>
+                    @endforeach
+                    </ul>
                 </div>
             </div>
         </div>
