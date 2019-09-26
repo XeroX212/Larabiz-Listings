@@ -20,7 +20,7 @@ class CreateListingsTable extends Migration
             $table->string('address');
             $table->string('website');
             $table->string('email');
-            $table->integer('phone')->unsigned();
+            $table->string('phone');
             $table->text('bio');
             $table->timestamps();
         });

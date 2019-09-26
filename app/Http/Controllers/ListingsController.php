@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use App\Listings;
+use Illuminate\Support\Facades\Auth;
 
 class ListingsController extends Controller
 {
@@ -23,7 +26,7 @@ class ListingsController extends Controller
      */
     public function create()
     {
-        //
+        return view('create');
     }
 
     /**
@@ -34,7 +37,37 @@ class ListingsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $messages = [
+            'integer' => 'The :attribute must be a number.',
+        ];
+
+        $rules = [
+            'name' => 'required',
+            'address' => 'required',
+            'website' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required|digits:10',
+            'bio' => 'required',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return redirect('listings/create')->withErrors($validator)->withInput();
+        }
+
+        $listing = new Listings;
+        $listing->user_id = Auth::id();
+        $listing->name = $request->input('name');
+        $listing->address = $request->input('address');
+        $listing->website = $request->input('website');
+        $listing->email = $request->input('email');
+        $listing->phone = $request->input('phone');
+        $listing->bio = $request->input('bio');
+        $listing->save();
+
+        return redirect()->route('home')->with('status', 'Task was successful!');
+
     }
 
     /**
